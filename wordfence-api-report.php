@@ -40,6 +40,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Plugin Update Checker integration
+require_once plugin_dir_path(__FILE__) . 'plugin-update-checker/plugin-update-checker.php';
+
+$myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
+    'https://github.com/sajdoko/wordfence-api-report/', // GitHub repo URL
+    __FILE__,
+    'wordfence-api-report'
+);
+
+// Optional: If your repo is private, set the access token
+// $myUpdateChecker->setAuthentication('your-github-token');
+
+// Optional: Set the branch to check for updates (default is 'master')
+$myUpdateChecker->setBranch('main');
+
 /**
  * =========================================================================
  * Activation & Dependency Check
