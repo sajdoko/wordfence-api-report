@@ -3,7 +3,7 @@
    * Plugin Name:       Wordfence API Report
    * Plugin URI:        https://github.com/sajdoko/wordfence-api-report
    * Description:       Exposes key Wordfence security data via a secure REST API endpoint for external monitoring.
-   * Version:           1.5.0
+   * Version:           1.5.1
    * Author:            Sajmir Doko
    * Author URI:        https://localweb.it
    * Requires at least: 5.5
@@ -143,7 +143,7 @@
 
     // Create the URL for the "Generate New Key" action with a nonce.
     $generation_url = wp_nonce_url(
-      admin_url('options-general.php?page=wordfence-api-report&action=generate_key'),
+      admin_url('admin.php?page=wordfence-api-report&action=generate_key'),
       'wordfence_generate_key_nonce',
       'wordfence_nonce'
     );
@@ -164,7 +164,7 @@
         update_option('wordfence_api_key', $new_key);
 
         // Redirect back to the settings page with a success message
-        wp_safe_redirect(admin_url('options-general.php?page=wordfence-api-report&key_generated=1'));
+        wp_safe_redirect(admin_url('admin.php?page=wordfence-api-report&key_generated=1'));
         exit;
       }
     }
