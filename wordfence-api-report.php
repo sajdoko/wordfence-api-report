@@ -3,7 +3,7 @@
    * Plugin Name:       Wordfence API Report
    * Plugin URI:        https://github.com/sajdoko/wordfence-api-report
    * Description:       Exposes key Wordfence security data via a secure REST API endpoint for external monitoring.
-   * Version:           1.4.0
+   * Version:           1.5.0
    * Author:            Sajmir Doko
    * Author URI:        https://localweb.it
    * Requires at least: 5.5
