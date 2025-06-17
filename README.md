@@ -1,15 +1,20 @@
 # Wordfence API Report
 
-Exposes key Wordfence security data via a secure REST API endpoint for external monitoring, such as in a Laravel CRM.
+Exposes advanced Wordfence security data via a secure REST API endpoint for external monitoring, dashboards, or integrations (e.g., Laravel CRM).
 
 ## Description
-This plugin provides a REST API endpoint to retrieve important security metrics from the Wordfence plugin, including scan results, threats blocked, and security recommendations. It is designed for integration with external monitoring systems.
+This plugin provides a REST API endpoint to retrieve detailed security metrics from the Wordfence plugin, including activity reports, top blocked IPs/countries, failed logins, and more. It is designed for integration with external monitoring systems and supports GitHub-based plugin updates.
 
 ## Features
 - Secure REST API endpoint for Wordfence data
-- Scan summary (malware, warnings, last scan time)
-- Threats blocked (firewall, brute force, top IPs/countries)
+- Activity report with:
+  - Top blocked IPs (with readable IP addresses)
+  - Top blocked countries
+  - Top failed login attempts
+- Scan summary (status, issues, last scan time)
 - Security recommendations (premium status, 2FA, scheduled scans)
+- API key management from the Wordfence menu
+- GitHub-based plugin update support (via Plugin Update Checker)
 
 ## Requirements
 - WordPress 5.5 or higher
@@ -20,7 +25,7 @@ This plugin provides a REST API endpoint to retrieve important security metrics 
 1. Ensure Wordfence is installed and activated.
 2. Upload this plugin to your `/wp-content/plugins/` directory.
 3. Activate the plugin through the WordPress admin.
-4. Go to **Settings → Wordfence API Report** to generate and copy your API key.
+4. Go to **Wordfence → API Report** to generate and copy your API key.
 
 ## Usage
 - **Endpoint:** `/wp-json/wordfence/v1/report`
@@ -28,33 +33,35 @@ This plugin provides a REST API endpoint to retrieve important security metrics 
 - **Header:** `X-Api-Key: your-super-secret-key-here`
 
 Example request using `curl`:
+
 ```sh
 curl -H "X-Api-Key: your-super-secret-key-here" https://yourdomain.com/wp-json/wordfence/v1/report
 ```
 
 ## Response Example
+
 ```json
 {
+  "getTopIPsBlocked": [
+    { "IP": "192.0.2.1", "count": 12 },
+    ...
+  ],
+  "getTopCountriesBlocked": [
+    { "country": "US", "count": 34 },
+    ...
+  ],
+  "getTopFailedLogins": [
+    { "IP": "203.0.113.5", "username": "admin", "count": 7 },
+    ...
+  ],
   "scan_summary": {
-    "last_scan_timestamp": 1718500000,
-    "status": "Completed without issues",
-    "total_issues_found": 0,
-    "issue_counts_by_severity": {
-      "malware": 0,
-      "warnings": 0
-    }
-  },
-  "threats_blocked": {
-    "total_firewall_blocks": 123,
-    "brute_force_blocks": 45,
-    "top_blocked_ips": [ ... ],
-    "top_blocked_countries": [ ... ]
-  },
-  "recommendations": {
-    "is_premium": false,
-    "is_2fa_active": true,
-    "is_scheduled_scan_active": true
-  }
+    "last_scan_timestamp": 1750143959,
+    "status": "Completed with issues",
+    "total_issues_found": 3,
+    "issue_counts_by_status": {
+        "new": "3"
+    },
+    "issues": [...]
 }
 ```
 
@@ -63,6 +70,12 @@ curl -H "X-Api-Key: your-super-secret-key-here" https://yourdomain.com/wp-json/w
 - Keep your API key secret and rotate it if needed.
 
 ## Changelog
+### 1.5.0
+- Added activity report endpoints (top IPs, countries, failed logins, readable IPs)
+- Integrated with Wordfence's wfActivityReport for advanced reporting
+- Improved API key management and admin UI
+- GitHub-based plugin update support
+
 ### 1.4.0
 - Improved error handling and compatibility
 - Updated REST response structure
